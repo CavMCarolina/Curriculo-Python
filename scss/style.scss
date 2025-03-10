@@ -45,7 +45,7 @@
 
 .flex {
     display: flex;
-    gap: 15px;
+    gap: 5px;
 }
 
 // @media (min-width: 470px) and (max-width:640px){
@@ -63,3 +63,12 @@
     //     flex-wrap: nowrap;
     // }
 // }
+
+// Introdução
+.tipo {
+   font-size: 12px !important;
+}
+
+.negrito {
+    font-weight: bold !important;
+}

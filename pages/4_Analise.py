@@ -37,8 +37,6 @@ pages = st.sidebar.selectbox("", [
     "Dashboard Power BI"
 ])
 
-st.write(df.head())
-
 # Função para exibir gráfico Plotly
 def plot_distribution(x, y, title, xlabel, ylabel):
     fig = go.Figure(data=[go.Bar(x=x, y=y)])
@@ -47,15 +45,70 @@ def plot_distribution(x, y, title, xlabel, ylabel):
 
 if pages == "Introdução":
     st.header("Apresentação dos Dados:")
-    st.write("Os dados são referentes a produção de cada fonte renovável (em WMed) em cada região do Brasil.... contextualizacao dos dados")
-    # imagem de planilha
+    st.write("O conjunto de dados utilizado neste estudo foi extraído do site da Operador Nacional do Sistema Elétrico (ONS) e se referem à produção semanal de energia renovável em cada uma das regiões do Brasil.")
+    st.write("As fontes consideradas incluem aquelas que fazem parte da matriz sustentável do país, como hidrelétrica, eólica, térmica e solar. Os valores apresentados são expressos em megawatts médios (MWmed), uma métrica que reflete a potência média gerada ao longo do período analisado.")
 
     st.divider()
-    
+
     st.header("Identificação das Variáveis:")
+    st.markdown(f"""
+        <ul>
+            <li>
+                <div class="flex">
+                    <p class="negrito">Ano</p>
+                    <p>= asdasdasda</p>
+                </div>
+                <div class="flex">
+                    <p class="tipo">Variável do Tipo:</p>
+                    <p>Discreta</p>
+                </div>
+            </li>
+            <li>Semana = 
+                <p class="tipo">Variável do Tipo: Discreta</p>
+            </li> 
+            <li>Região = 
+                <p class="tipo">Variável do Tipo: Nominal</p>
+            </li> 
+            <li>Hidráulica = 
+                <p class="tipo">Variável do Tipo: Contínua</p>
+            </li> 
+            <li>Térmica = 
+                <p class="tipo">Variável do Tipo: Contínua</p>
+            </li>
+            <li>Eólica = 
+                <p class="tipo">Variável do Tipo: Contínua</p>
+            </li> 
+            <li>Solar = 
+                <p class="tipo">Variável do Tipo: Contínua</p>
+            </li>
+            <li>Total = 
+                <p class="tipo">Variável do Tipo: Contínua</p>
+            </li>
+        </ul>
+    """, unsafe_allow_html=True)
 
     st.divider()
+
     st.header("Principais Perguntas para a Análise:")
+    st.write("A análise foi feita com base nas seguintes perguntas:")
+    st.markdown(f"""
+        <div>
+            <p class="negrito">1 - </p>
+            <p>Qual fonte de energia renovável teve maior crescimento ao longo do tempo no Brasil?</p>
+        </div>
+        <div>
+            <p class="negrito">2 - </p>
+            <p>Qual fonte de energia renovável teve maior crescimento ao longo do tempo no Brasil?</p>
+        </div>
+        <div>
+            <p class="negrito">3 - </p>
+            <p>Qual fonte de energia renovável teve maior crescimento ao longo do tempo no Brasil?</p>
+        </div>
+        <div>
+            <p class="negrito">4 - </p>
+            <p>Qual fonte de energia renovável teve maior crescimento ao longo do tempo no Brasil?</p>
+        </div>
+    """, unsafe_allow_html=True)
 
 elif pages == "Análise Inicial":
     st.header("Medidas Centrais:")

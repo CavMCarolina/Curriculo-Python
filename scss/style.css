@@ -37,5 +37,13 @@
 }
 .flex {
   display: flex;
-  gap: 15px;
+  gap: 5px;
+}
+
+.tipo {
+  font-size: 12px !important;
+}
+
+.negrito {
+  font-weight: bold !important;
 }/*# sourceMappingURL=style.css.map */

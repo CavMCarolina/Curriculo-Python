@@ -1,6 +1,22 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import scipy.stats as stats
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.figure_factory as ff
+from plotnine import *
+
+st.set_page_config(page_title="Análise Fontes Renováveis", layout="wide", page_icon="images/icon.png")
+st.logo("images/icon.png")
+
+# Função para aplicar o css :)
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+css_file = "scss/style.css"
+load_css(css_file)
 
 if "data" not in st.session_state:
     st.session_state["data"] = pd.read_csv("data/Global Solution.csv")
@@ -155,7 +171,7 @@ elif pages == "Planilha dos Dados":
     
     df_long = df.melt(id_vars=["ano"], var_name="Fonte Renovável", value_name="Geração (MW)")
 
-    fonte_selecionada = st.sidebar.selectbox("Selecione a fonte de energia", fontes)
+    fonte_selecionada = st.selectbox("Selecione a fonte de energia", fontes)
 
     if fonte_selecionada == "Todas":
         df_filtered = df_long

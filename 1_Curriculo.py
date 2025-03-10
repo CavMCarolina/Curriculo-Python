@@ -1,59 +1,97 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 import base64
+from streamlit_extras.app_logo import add_logo
 
-st.set_page_config(page_title="Currículo Carolina", layout="wide")
+st.set_page_config(page_title="Currículo Carolina", layout="wide", page_icon="images/icon.png")
+st.logo("images/icon.png")
 
+# Função para aplicar o css :)
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+css_file = "scss/style.css"
+load_css(css_file)
+
+# Definindo colunas
 col1, col2, col3 = st.columns([0.4, 0.1, 0.5])
 col1.image("images/Foto.png")
 
 col3.title("Carolina Cavalli Machado")
+
 # Colunas com informacoes
 with col3:
-    col3_1, col3_2, col3_3, col3_4, col3_5, col3_6, col3_7 = st.columns([2, 0.1, 2, 0.1, 1, 0.1, 1])
-    
-    # Usando css para estilizar mais as coisinhas do streamlit :)
-    with col3_1:
-        st.markdown("<div style='text-align: center;'>Butantã, Zona Oeste - SP</div>", unsafe_allow_html=True)
-    with col3_2:
-        st.markdown("<div style='text-align: center;'>•</div>", unsafe_allow_html=True) 
-    with col3_3:
-        st.markdown("<div style='text-align: center;'><a href='mailto:cavm.carolina@gmail.com'>cavm.carolina@gmail.com</a></div>", unsafe_allow_html=True)
-    with col3_4:
-        st.markdown("""
-        <style>
-            @media (min-width: 641px) and (max-width: 1600px) {
-                .mobile {
-                    display: none !important;
-                }
-            }
-        </style>
-        """, unsafe_allow_html=True)
+    # Função para pegar o logo da pasta pq por algum motivo colocar o caminho no src nao vai
+    def get_base64_image(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
 
-        st.markdown("<div class='mobile' style='text-align: center;'>•</div>", unsafe_allow_html=True)  
-    with col3_5:
-        st.markdown("""
-        <a href="https://www.linkedin.com/in/carolinacavallimachado" target="_blank" style="display: block; text-align: center;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/2048px-LinkedIn_icon.svg.png" width="30"/>
-        </a>
+    logo_github = get_base64_image("images/github.png")
+
+    st.markdown(f"""
+        <div class="container">
+            <div class="linha">
+                <div class="item">Butantã, Zona Oeste - SP</div>
+                <div class="item dot1">•</div>
+                <div class="item"><a href="mailto:cavm.carolina@gmail.com">cavm.carolina@gmail.com</a></div>
+                <div class="item dot2">•</div>
+            </div>
+            <div class="linha">
+                <div class="item">
+                    <a href="https://www.linkedin.com/in/carolinacavallimachado" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/2048px-LinkedIn_icon.svg.png" width="30"/>
+                    </a>
+                </div>
+                <div class="item dot3">•</div>
+                <div class="item">
+                    <a href="https://github.com/CavMCarolina" target="_blank">
+                        <img src="data:image/png;base64,{logo_github}" width="32"/>
+                    </a>
+                </div>
+            </div>
     """, unsafe_allow_html=True)
-    with col3_6:
-        st.markdown("<div style='text-align: center;'>•</div>", unsafe_allow_html=True) 
-    with col3_7:
-        # Função para pegar o logo da pasta pq por algum motivo colocar o url no src nao vai 
-        def get_base64_image(image_path):
-            with open(image_path, "rb") as img_file:
-                return base64.b64encode(img_file.read()).decode()
+    st.divider()
 
-        logo_github = get_base64_image("images/github.png")
+    st.markdown("#### Estagiária em Análise de Dados")
+    st.write("Estou no segundo ano de Engenharia de Software, em busca de um estágio para aplicar meus conhecimentos em projetos reais, contribuir para o desenvolvimento da empresa e aprimorar minhas habilidades profissionais.")
 
-        st.markdown(f"""
-        <a href="https://github.com/CavMCarolina" target="_blank" style="display: block; text-align: center;">
-            <img src="data:image/png;base64,{logo_github}" width="32"/>
-        </a>
-    """, unsafe_allow_html=True)
-       
-col3.markdown("<hr style='margin: 5px 2px;'>", unsafe_allow_html=True)
-col3.markdown("#### Engenharia de Software")
-col3.write("aduahsudh")
+st.divider()
+st.markdown("## Formação Acadêmica:")
+st.markdown("#### Engenharia de Software")
+st.markdown(f"""
+    <div class="flex">
+        <div>FIAP (Faculdade de Informática e Administração Paulista)</div>
+        <div>•</div>
+        <div>2023 - 2027</div>
+    </div>
+""", unsafe_allow_html=True)
+st.divider()
+
+st.markdown("## Experiências Acadêmicas:")
+st.divider()
+
+st.markdown("## Conhecimento Em:")
+st.markdown(f"""
+    <ul>
+        <li>HTML;</li>
+        <li>CSS;</li>
+        <li>JavaScript;</li>
+        <li>Tailwind;</li>
+        <li>Bootstrap;</li>
+        <li>SASS;</li>
+        <li>React.js;</li>
+        <li>Git;</li>
+        <li>Python;</li>
+        <li>Estatística;</li>
+        <li>Modelagem de Dados;</li>
+        <li>Scrum;</li>
+    </ul>
+""", unsafe_allow_html = True)
+st.divider()
+
+st.markdown("## Idiomas:")
+st.markdown(f"""
+    <li>Português - Nativo; Fluente</li>
+    <li>Inglês - Nível B2; Intermediário</li>
+""", unsafe_allow_html = True)
+st.divider()

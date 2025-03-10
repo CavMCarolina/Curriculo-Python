@@ -1,1 +1,41 @@
-/*# sourceMappingURL=style.css.map */
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap");
+* {
+  font-family: "Funnel Display", serif !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.container {
+  display: flex;
+}
+.container .item {
+  align-content: center;
+}
+.container .linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+.container .dot1, .container .dot2, .container .dot3 {
+  display: none;
+}
+
+@media (min-width: 525px) and (max-width: 640px) {
+  .container {
+    display: block;
+  }
+  .dot1, .dot3 {
+    display: block !important;
+  }
+}
+@media (min-width: 1155px) {
+  .dot1, .dot3 {
+    display: block !important;
+  }
+}
+.flex {
+  display: flex;
+  gap: 15px;
+}/*# sourceMappingURL=style.css.map */

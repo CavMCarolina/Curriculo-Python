@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');
+
+* {
+    font-family: "Funnel Display", serif !important;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+// Pagina Incial
+.container {
+    display: flex;
+
+    .item {
+        align-content: center;
+    }
+
+    .linha {
+        display: flex;
+        flex-wrap: wrap;
+        gap:20px;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .dot1, .dot2, .dot3 {
+        display: none;
+    }
+}
+
+@media (min-width:525px) and (max-width:640px) {
+    .container {
+        display: block;
+    }
+
+    .dot1, .dot3 {
+        display: block !important;
+    }
+}
+
+@media (min-width:1155px) {
+    .dot1, .dot3 {
+        display: block !important;
+    }
+}
+
+.flex {
+    display: flex;
+    gap: 15px;
+}
+
+// @media (min-width: 470px) and (max-width:640px){
+//     .dot1 {
+//         display: block !important;
+//     }
+// }
+
+// @media (min-width: 1044px) {
+//     .dot1 {
+//         display: block !important;
+//     }
+
+    // .linha {
+    //     flex-wrap: nowrap;
+    // }
+// }

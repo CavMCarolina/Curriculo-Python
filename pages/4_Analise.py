@@ -45,7 +45,7 @@ def plot_distribution(x, y, title, xlabel, ylabel):
 
 if pages == "Introdução":
     st.header("Apresentação dos Dados:")
-    st.write("O conjunto de dados utilizado neste estudo foi extraído do site da Operador Nacional do Sistema Elétrico (ONS) e se referem à produção semanal de energia renovável em cada uma das regiões do Brasil.")
+    st.write("Os dados utilizados neste estudo foram extraídos do site da Operador Nacional do Sistema Elétrico (ONS) e se referem à produção semanal de energia renovável em cada uma das regiões do Brasil.")
     st.write("As fontes consideradas incluem aquelas que fazem parte da matriz sustentável do país, como hidrelétrica, eólica, térmica e solar. Os valores apresentados são expressos em megawatts médios (MWmed), uma métrica que reflete a potência média gerada ao longo do período analisado.")
 
     st.write(df)
@@ -137,30 +137,74 @@ if pages == "Introdução":
     """, unsafe_allow_html=True)
 
 elif pages == "Análise Inicial":
-    # Formatacao "inversa", para nao perder o resto do código
-    mapeamento_nomes = {
-    "Hidráulica": "hidraulica",
-    "Térmica": "termica",
-    "Eólica": "eolica",
-    "Solar": "solar",
-    "Total": "total"
-    }
+    # Definição das fontes renováveis
+    fontes_renovaveis = ["hidraulica", "termica", "eolica", "solar"]
 
-    # Criando selectbox com as keys 
-    opcoes_formatadas = list(mapeamento_nomes.keys())
-    coluna_escolhida_formatada = st.selectbox("Escolha uma coluna numérica:", opcoes_formatadas)
+    def formatar_tabela(tabela):
+        """Formata os valores para 2 casas decimais, troca pontos por vírgulas e adiciona separador de milhar corretamente."""
+        return tabela.applymap(lambda x: "{:,.2f}".format(x).replace(",", "X").replace(".", ",").replace("X", "."))
 
-    # Convertendo para o nome original antes de buscar no DataFrame
-    coluna_escolhida = mapeamento_nomes[coluna_escolhida_formatada]
+    def calcular_medidas_centrais(df):
+        """Calcula média, mediana e moda."""
+        return pd.DataFrame({
+            "Média": df[fontes_renovaveis].mean(),
+            "Mediana": df[fontes_renovaveis].median(),
+            "Moda": df[fontes_renovaveis].mode().iloc[0]  # Pegando a primeira moda caso existam múltiplas
+        })
 
-    if coluna_escolhida:
-        st.write("Distribuição dos dados:")
-        st.write(df[coluna_escolhida].describe())
+    def calcular_desvio_medio(df):
+        """Calcula o desvio médio manualmente de forma correta."""
+        medias = df[fontes_renovaveis].mean()  # Calcula a média de cada coluna
+        return df[fontes_renovaveis].apply(lambda x: (abs(x - medias[x.name])).mean())  # Desvio médio correto
 
+    def calcular_medidas_dispersao(df):
+        """Calcula desvio padrão, amplitude, coeficiente de variação, desvio médio e variância."""
+        return pd.DataFrame({
+            "Desvio Padrão": df[fontes_renovaveis].std(),
+            "Amplitude": df[fontes_renovaveis].max() - df[fontes_renovaveis].min(),
+            "Coef. de Variação (%)": (df[fontes_renovaveis].std() / df[fontes_renovaveis].mean()) * 100,
+            "Desvio Médio": calcular_desvio_medio(df)
+        })
+
+    # Criando tabelas
+    medidas_centrais = calcular_medidas_centrais(df)
+    medidas_dispersao = calcular_medidas_dispersao(df)
+
+    # Formatando os valores
+    medidas_centrais = formatar_tabela(medidas_centrais)
+    medidas_dispersao = formatar_tabela(medidas_dispersao)
+
+    # Renomeando os índices para exibição na nova ordem
+    medidas_centrais.index = ["Hidráulica", "Térmica", "Eólica", "Solar"]
+    medidas_dispersao.index = ["Hidráulica", "Térmica", "Eólica", "Solar"]
+
+    # Exibindo as tabelas
     st.header("Medidas Centrais:")
+    st.table(medidas_centrais)
+
     st.divider()
 
     st.header("Medidas de Dispersão:")
+    st.table(medidas_dispersao)
+
+    # CSS para centralizar os textos
+    st.markdown(
+        """
+        <style>
+            table {
+                width: 100%;
+            }
+            th, td {
+                text-align: center !important;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+
+
     st.divider()
 
     st.header("Correlação:")

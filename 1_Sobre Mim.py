@@ -2,7 +2,7 @@ import streamlit as st
 import base64
 from streamlit_extras.app_logo import add_logo
 
-st.set_page_config(page_title="Currículo Carolina", layout="wide", page_icon="images/icon.png")
+st.set_page_config(page_title="Sobre Mim", layout="wide", page_icon="images/icon.png")
 st.logo("images/icon.png")
 
 # Função para aplicar o css :)

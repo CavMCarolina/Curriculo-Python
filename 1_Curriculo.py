@@ -14,7 +14,7 @@ css_file = "scss/style.css"
 load_css(css_file)
 
 st.sidebar.markdown("Carolina Cavalli Machado")
-st.sidebar.markdown(f"""<a href="">Linkedin</a> • <a href="">GitHub</a>""", unsafe_allow_html=True)
+st.sidebar.markdown(f"""<a href="https://www.linkedin.com/in/carolinacavallimachado">Linkedin</a> • <a href="https://github.com/CavMCarolina">GitHub</a>""", unsafe_allow_html=True)
 
 # Definindo colunas
 col1, col2, col3 = st.columns([0.4, 0.1, 0.5])
@@ -74,7 +74,9 @@ col1.divider()
 
 col1.markdown("## Idiomas:")
 col1.markdown(f"""
-    <li>Português - Nativo; Fluente</li>
-    <li>Inglês - Nível B2; Intermediário</li>
+    <ul>
+        <li>Português - Nativo; Fluente</li>
+        <li>Inglês - Nível B2; Intermediário</li>
+    </ul>
 """, unsafe_allow_html = True)
 st.divider()

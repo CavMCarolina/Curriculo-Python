@@ -29,7 +29,7 @@ for coluna in colunas_numericas:
     if coluna in df.columns:
         df[coluna] = pd.to_numeric(df[coluna].astype(str).str.replace(",", "."), errors="coerce")
 
-pages = st.sidebar.selectbox("", [
+pages = st.sidebar.selectbox("Escolha o nível da Análise", [
     "Introdução",
     "Análise Inicial",
     "Distribuições",
@@ -245,3 +245,8 @@ elif pages == "Planilha dos Dados":
 
 elif pages == "Dashboard Power BI":
     st.header("Dashboard Fontes Renováveis")
+
+
+st.sidebar.divider()
+st.sidebar.markdown("Carolina Cavalli Machado")
+st.sidebar.markdown(f"""<a href="">Linkedin</a> • <a href="">GitHub</a>""", unsafe_allow_html=True)

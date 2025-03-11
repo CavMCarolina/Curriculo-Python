@@ -13,6 +13,9 @@ def load_css(file_name):
 css_file = "scss/style.css"
 load_css(css_file)
 
+st.sidebar.markdown("Carolina Cavalli Machado")
+st.sidebar.markdown(f"""<a href="">Linkedin</a> • <a href="">GitHub</a>""", unsafe_allow_html=True)
+
 # Definindo colunas
 col1, col2, col3 = st.columns([0.4, 0.1, 0.5])
 col1.image("images/Foto.png")
@@ -31,7 +34,7 @@ with col3:
     st.markdown(f"""
         <div class="container">
             <div class="linha">
-                <div class="item">Butantã, Zona Oeste - SP</div>
+                <div class="item">Zona Oeste - SP</div>
                 <div class="item dot1">•</div>
                 <div class="item"><a href="mailto:cavm.carolina@gmail.com">cavm.carolina@gmail.com</a></div>
                 <div class="item dot2">•</div>
@@ -56,41 +59,21 @@ with col3:
     st.write("Estou no segundo ano de Engenharia de Software, em busca de um estágio para aplicar meus conhecimentos em projetos reais, contribuir para o desenvolvimento da empresa e aprimorar minhas habilidades profissionais.")
 
 st.divider()
-st.markdown("## Formação Acadêmica:")
-st.markdown("#### Engenharia de Software")
-st.markdown(f"""
+
+col1, col2 = st.columns([0.7, 0.3])
+col1.markdown("## Formação Acadêmica:")
+col1.markdown("#### Engenharia de Software")
+col1.markdown(f"""
     <div class="flex">
         <div>FIAP (Faculdade de Informática e Administração Paulista)</div>
         <div>•</div>
         <div>2023 - 2027</div>
     </div>
 """, unsafe_allow_html=True)
-st.divider()
+col1.divider()
 
-st.markdown("## Experiências Acadêmicas:")
-st.divider()
-
-st.markdown("## Conhecimento Em:")
-st.markdown(f"""
-    <ul>
-        <li>HTML;</li>
-        <li>CSS;</li>
-        <li>JavaScript;</li>
-        <li>Tailwind;</li>
-        <li>Bootstrap;</li>
-        <li>SASS;</li>
-        <li>React.js;</li>
-        <li>Git;</li>
-        <li>Python;</li>
-        <li>Estatística;</li>
-        <li>Modelagem de Dados;</li>
-        <li>Scrum;</li>
-    </ul>
-""", unsafe_allow_html = True)
-st.divider()
-
-st.markdown("## Idiomas:")
-st.markdown(f"""
+col1.markdown("## Idiomas:")
+col1.markdown(f"""
     <li>Português - Nativo; Fluente</li>
     <li>Inglês - Nível B2; Intermediário</li>
 """, unsafe_allow_html = True)

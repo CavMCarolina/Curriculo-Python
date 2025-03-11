@@ -11,6 +11,9 @@ def load_css(file_name):
 css_file = "scss/style.css"
 load_css(css_file)
 
+st.sidebar.markdown("Carolina Cavalli Machado")
+st.sidebar.markdown(f"""<a href="">Linkedin</a> • <a href="">GitHub</a>""", unsafe_allow_html=True)
+
 st.header("Cursos Complementares:")
 st.divider()
 

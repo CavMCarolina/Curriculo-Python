@@ -13,4 +13,32 @@ load_css(css_file)
 
 st.header("Cursos Complementares:")
 st.divider()
-st.markdown("#### Power BI Básico")
+
+col1, col2 = st.columns([0.4, 0.7])
+col1.markdown("#### Data Visualization")
+col1.write("FIAP • Em Andamento...")
+col1.divider()
+
+col1.markdown("#### Python")
+col1.write("FIAP • 2025")
+col1.divider()
+
+col1.markdown("#### Power BI Básico")
+col1.write("Tetra Educação • 2025")
+col1.divider()
+
+col1.markdown("#### Gestão de Infraestrutura de TI")
+col1.write("FIAP • 2024")
+col1.divider()
+
+col1.markdown("#### Formação Social e Sustentabilidade")
+col1.write("FIAP • 2024")
+col1.divider()
+
+col1.markdown("#### Design Thinking - Process")
+col1.write("FIAP • 2023")
+col1.divider()
+
+col1.markdown("#### Microsoft Excel Avançado")
+col1.write("Fundação Bradesco • 2023")
+st.divider()

@@ -33,24 +33,21 @@ with col3:
 
     st.markdown(f"""
         <div class="container">
-            <div class="linha">
-                <div class="item">Zona Oeste - SP</div>
-                <div class="item dot1">•</div>
-                <div class="item"><a href="mailto:cavm.carolina@gmail.com">cavm.carolina@gmail.com</a></div>
-                <div class="item dot2">•</div>
+            <div class="item">Zona Oeste - SP</div>
+            <div class="item dot1">•</div>
+            <div class="item"><a href="mailto:cavm.carolina@gmail.com">cavm.carolina@gmail.com</a></div>
+            <div class="item dot2">•</div>
+            <div class="item">
+                <a href="https://www.linkedin.com/in/carolinacavallimachado" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/2048px-LinkedIn_icon.svg.png" width="30"/>
+                </a>
             </div>
-            <div class="linha">
-                <div class="item">
-                    <a href="https://www.linkedin.com/in/carolinacavallimachado" target="_blank">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/2048px-LinkedIn_icon.svg.png" width="30"/>
-                    </a>
-                </div>
-                <div class="item dot3">•</div>
-                <div class="item">
-                    <a href="https://github.com/CavMCarolina" target="_blank">
-                        <img src="data:image/png;base64,{logo_github}" width="32"/>
-                    </a>
-                </div>
+            <div class="item dot3">•</div>
+            <div class="item">
+                <a href="https://github.com/CavMCarolina" target="_blank">
+                    <img src="data:image/png;base64,{logo_github}" width="32"/>
+                </a>
+            </div>
             </div>
     """, unsafe_allow_html=True)
     st.divider()

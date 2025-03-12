@@ -9,40 +9,14 @@
 // Pagina Incial
 .container {
     display: flex;
+    justify-content: space-around;
 
     .item {
         align-content: center;
     }
-
-    .linha {
-        display: flex;
-        flex-wrap: wrap;
-        gap:20px;
-        justify-content: space-around;
-        margin-bottom: 20px;
-    }
-
-    // .dot1, .dot2, .dot3 {
-    //     display: none;
-    // }
 }
 
-// @media (min-width:525px) and (max-width:640px) {
-//     .container {
-//         display: block;
-//     }
-
-//     .dot1, .dot3 {
-//         display: block !important;
-//     }
-// }
-
-// @media (min-width:1155px) {
-//     .dot1, .dot3 {
-//         display: block !important;
-//     }
-// }
-
+// Configuracao universal :)
 .flex {
     display: flex;
     gap: 5px;

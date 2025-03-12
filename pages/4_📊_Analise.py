@@ -63,14 +63,12 @@ if pages == "Introdução":
     st.header("Apresentação dos Dados:")
     st.write("Os dados utilizados neste estudo foram extraídos do site da Operador Nacional do Sistema Elétrico (ONS) e se referem à produção semanal de energia renovável em cada uma das regiões do Brasil.")
     st.write("As fontes consideradas incluem aquelas que fazem parte da matriz sustentável do país, como hidrelétrica, eólica, térmica e solar. Os valores apresentados são expressos em megawatts médios (MWmed), uma métrica que reflete a potência média gerada ao longo do período analisado.")
-
-  
    
-    # Aplicando a formatação
+    # Aplicando a estilizacao
     df_estilizado = formatar_df(df)
-
-    # Exibindo no Streamlit
+    # Exibindo o df
     st.dataframe(df_estilizado, use_container_width=True)
+
     st.divider()
 
     # Identificação das Variáveis
@@ -170,6 +168,7 @@ elif pages == "Análise Inicial":
         """Formata os valores para 2 casas decimais, troca pontos por vírgulas e adiciona separador de milhar corretamente."""
         return tabela.applymap(lambda x: "{:,.2f}".format(x).replace(",", "X").replace(".", ",").replace("X", "."))
 
+    # funcoes dos calculos
     def calcular_medidas_centrais(df):
         """Calcula média, mediana e moda."""
         return pd.DataFrame({
@@ -257,7 +256,6 @@ elif pages == "Análise Inicial":
 
     # Correlação
     # Configuracoes Grafico 1
-    # Convertendo os dados para o formato 'long' (long format)
     df_long = pd.melt(df, id_vars=['regiao', 'ano', 'semana'],
                     value_vars=['hidraulica', 'termica', 'eolica', 'solar'],
                     var_name='energia', value_name='valor')
@@ -292,13 +290,12 @@ elif pages == "Análise Inicial":
         title='Total de Energia por Fonte ao Longo do Tempo (Todas as Regiões)',
         xaxis_title='Data',
         yaxis_title='Valor Total da Energia',
-        hovermode='x unified',  # Exibe todas as informações ao passar o mouse
-        template='plotly_dark', # Escolha um tema bonito ('plotly', 'ggplot2', 'seaborn', etc.)
+        hovermode='x unified',
+        template='plotly_dark', 
         legend_title='Fonte de Energia'
     )
 
     # Configuracoes Grafico 2
-    # Assumindo que df_total_energy e pivot_df já estão calculados
     pivot_df = df_total_energy.pivot(index='data', columns='energia', values='valor')
 
     # Selecionando as colunas para a correlação
@@ -310,29 +307,30 @@ elif pages == "Análise Inicial":
 
     # Gerando o heatmap interativo com Plotly
     fig2 = ff.create_annotated_heatmap(
-        z=correlation_matrix.values,  # Dados da matriz de correlação
-        x=correlation_matrix.columns.tolist(),  # Colunas (fontes de energia)
-        y=correlation_matrix.index.tolist(),  # Índices (fontes de energia)
-        annotation_text=z_text,  # Texto formatado para exibição
-        colorscale='Purples',  # Escolha uma colorscale válida
-        showscale=True,  # Mostrar a barra de escala de cores
-        colorbar_title='Correlação',  # Título da barra de cores
+        z=correlation_matrix.values,  
+        x=correlation_matrix.columns.tolist(),  
+        y=correlation_matrix.index.tolist(),  
+        annotation_text=z_text,  
+        colorscale='Purples',  
+        showscale=True,  
+        colorbar_title='Correlação', 
     )
 
     # Personalizando o layout
     fig2.update_layout(
         title={
             'text': 'Correlação: Hidráulica, Térmica e Eólica',
-            'x': 0.0,  # Alinhando o título à esquerda
+            'x': 0.0,  
             'xanchor': 'left',
-            'y': 0.95  # Empurrando o título um pouco para cima
+            'y': 0.95 
         },
         xaxis_title='Fonte de Energia',
         yaxis_title='Fonte de Energia',
-        annotations=[dict(font=dict(size=16))],  # Aumentando o tamanho do texto
-        margin=dict(t=100),  # Criando espaço no topo
+        annotations=[dict(font=dict(size=16))],  
+        margin=dict(t=100),
     )
 
+    # Exibição na Página
     st.header("Correlação:")
     st.write("O gráfico temporal apresenta a geração média de cada fonte renovável ao longo do tempo em MWmed, considerando todas as regiões do Brasil. Ele permite visualizar as variações na produção de energia e possíveis padrões sazonais.")    
     # Grafico Temporal
@@ -383,7 +381,6 @@ elif pages == "Distribuições":
         fig.update_layout(title=title, xaxis_title=xlabel, yaxis_title=ylabel)
         st.plotly_chart(fig)
 
-    # Formatacao "inversa", para nao perder o resto do código
     mapeamento_nomes = {
     "Hidráulica": "hidraulica",
     "Térmica": "termica",
@@ -391,20 +388,36 @@ elif pages == "Distribuições":
     "Solar": "solar"
     }
 
+    col1, col2, col3 = st.columns([0.3, 0.2, 0.5])
     # Criando selectbox com as keys 
     opcoes_formatadas = list(mapeamento_nomes.keys())
-    coluna_escolhida_formatada = st.selectbox("Escolha uma coluna numérica:", opcoes_formatadas)
+    coluna_escolhida_formatada = col1.selectbox("Escolha uma fonte renovável:", opcoes_formatadas)
 
     # Convertendo para o nome original antes de buscar no DataFrame
     coluna_escolhida = mapeamento_nomes[coluna_escolhida_formatada]
 
     if coluna_escolhida:
-        st.write("Distribuição dos dados:")
-        st.write(df[coluna_escolhida].describe())
-        dist = st.selectbox("Escolha a distribuição para análise:", ["Poisson", "Normal", "Binomial"])
+        col3.write("Distribuição dos dados:")
+       # Descrever a coluna escolhida
+        descricao = df[coluna_escolhida].describe()
+
+        # Remover o 'count'
+        descricao_sem_count = descricao.drop('count')
+
+        # Formatar os valores
+        descricao_formatada = descricao_sem_count.apply(lambda x: "{:,.2f}".format(x).replace(",", "X").replace(".", ",").replace("X", "."))
+
+        # Transpor para ter as estatísticas como colunas
+        descricao_transposta = descricao_formatada.to_frame().transpose()
+
+        # Exibir no Streamlit
+        col3.write(descricao_transposta)
+
+        # Escolha da distribuicao
+        dist = st.selectbox("Escolha a distribuição para análise:", ["Poisson", "Normal"])
 
         if dist == "Poisson":
-            col1, col2 = st.columns([0.3,0.7])
+            col1, col2, col3 = st.columns([0.3, 0.2, 0.5])
             
             lambda_est = df[coluna_escolhida].mean()
 
@@ -417,8 +430,8 @@ elif pages == "Distribuições":
 
             df_poisson = pd.DataFrame({"X": x, "P(X)": y, "P(X ≤ k) (Acumulado)": np.cumsum(y),"P(X > k) (Acumulado Cauda Direita)": 1-np.cumsum(y)}).set_index("X")
 
-            col2.write("Tabela de probabilidades:")
-            col2.write(df_poisson)
+            col3.write("Tabela de probabilidades:")
+            col3.write(df_poisson)
             
             st.subheader(f"Estimativa de λ (Taxa média de Ocorrência): {lambda_est:.2f}")
             prob_acum = st.toggle("Probabilidade Acumulada")
@@ -435,8 +448,7 @@ elif pages == "Distribuições":
 
 
                             
-        elif dist == "Normal":
-            
+        elif dist == "Normal": 
             n = df[coluna_escolhida].count()
             mu_est = df[coluna_escolhida].mean()
             sigma_est = df[coluna_escolhida].std()

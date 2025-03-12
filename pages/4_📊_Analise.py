@@ -41,12 +41,36 @@ pages = st.sidebar.selectbox("Escolha o nível da Análise", [
 
 # Introdução
 if pages == "Introdução":
+    # Função para deixar o df bonito
+    def formatar_df(df):
+        """Formata apenas as colunas numéricas para 2 casas decimais, 
+        troca pontos por vírgulas e adiciona separador de milhar.
+        Mantém colunas 'ano' e 'semana' sem formatação."""
+        
+        df_formatado = df.copy()  # Copia o DataFrame original
+        
+        for coluna in df_formatado.select_dtypes(include=['float64', 'int64']):
+            if coluna in ['ano', 'semana']:  
+                df_formatado[coluna] = df_formatado[coluna].astype(str)  # Mantém como string sem formatação
+            else:
+                df_formatado[coluna] = df_formatado[coluna].apply(
+                    lambda x: "{:,.2f}".format(x).replace(",", "X").replace(".", ",").replace("X", ".")
+                )
+        
+        return df_formatado
+
     # Apresentação dos Dados
     st.header("Apresentação dos Dados:")
     st.write("Os dados utilizados neste estudo foram extraídos do site da Operador Nacional do Sistema Elétrico (ONS) e se referem à produção semanal de energia renovável em cada uma das regiões do Brasil.")
     st.write("As fontes consideradas incluem aquelas que fazem parte da matriz sustentável do país, como hidrelétrica, eólica, térmica e solar. Os valores apresentados são expressos em megawatts médios (MWmed), uma métrica que reflete a potência média gerada ao longo do período analisado.")
 
-    st.write(df)
+  
+   
+    # Aplicando a formatação
+    df_estilizado = formatar_df(df)
+
+    # Exibindo no Streamlit
+    st.dataframe(df_estilizado)
     st.divider()
 
     # Identificação das Variáveis
@@ -140,8 +164,8 @@ if pages == "Introdução":
 elif pages == "Análise Inicial":
     # Definição das fontes renováveis
     fontes_renovaveis = ["hidraulica", "termica", "eolica", "solar"]
-    
-    # Funções para a criação de cada tabela
+
+    # Funcao para deixar as tabelas bonitas
     def formatar_tabela(tabela):
         """Formata os valores para 2 casas decimais, troca pontos por vírgulas e adiciona separador de milhar corretamente."""
         return tabela.applymap(lambda x: "{:,.2f}".format(x).replace(",", "X").replace(".", ",").replace("X", "."))
@@ -232,9 +256,7 @@ elif pages == "Análise Inicial":
     st.divider()
 
     # Correlação
-    st.header("Correlação:")
-
-    # Primeiro Grafico
+    # Configuracoes Grafico 1
     # Convertendo os dados para o formato 'long' (long format)
     df_long = pd.melt(df, id_vars=['regiao', 'ano', 'semana'],
                     value_vars=['hidraulica', 'termica', 'eolica', 'solar'],
@@ -253,12 +275,12 @@ elif pages == "Análise Inicial":
     df_total_energy = df_long.groupby(['data', 'energia'])['valor'].sum().reset_index()
 
     # Criando a figura interativa
-    fig = go.Figure()
+    fig1 = go.Figure()
 
     # Adicionando cada fonte de energia ao gráfico
     for energy_source in df_total_energy['energia'].unique():
         subset = df_total_energy[df_total_energy['energia'] == energy_source]
-        fig.add_trace(go.Scatter(
+        fig1.add_trace(go.Scatter(
             x=subset['data'], 
             y=subset['valor'], 
             mode='lines', 
@@ -266,7 +288,7 @@ elif pages == "Análise Inicial":
         ))
 
     # Personalizando o layout
-    fig.update_layout(
+    fig1.update_layout(
         title='Total de Energia por Fonte ao Longo do Tempo (Todas as Regiões)',
         xaxis_title='Data',
         yaxis_title='Valor Total da Energia',
@@ -275,10 +297,7 @@ elif pages == "Análise Inicial":
         legend_title='Fonte de Energia'
     )
 
-    # Exibindo o gráfico no Streamlit
-    st.plotly_chart(fig)
-
-    # Segundo Grafico
+    # Configuracoes Grafico 2
     # Assumindo que df_total_energy e pivot_df já estão calculados
     pivot_df = df_total_energy.pivot(index='data', columns='energia', values='valor')
 
@@ -286,26 +305,46 @@ elif pages == "Análise Inicial":
     selected_columns = ['hidraulica', 'termica', 'eolica']
     correlation_matrix = pivot_df[selected_columns].corr()
 
+    # Formatando os valores para duas casas decimais
+    z_text = [[f"{val:.2f}" for val in row] for row in correlation_matrix.values]
+
     # Gerando o heatmap interativo com Plotly
-    fig = ff.create_annotated_heatmap(
+    fig2 = ff.create_annotated_heatmap(
         z=correlation_matrix.values,  # Dados da matriz de correlação
         x=correlation_matrix.columns.tolist(),  # Colunas (fontes de energia)
         y=correlation_matrix.index.tolist(),  # Índices (fontes de energia)
+        annotation_text=z_text,  # Texto formatado para exibição
         colorscale='Purples',  # Escolha uma colorscale válida
         showscale=True,  # Mostrar a barra de escala de cores
         colorbar_title='Correlação',  # Título da barra de cores
     )
 
     # Personalizando o layout
-    fig.update_layout(
-        title='Correlação: Hidráulica, Térmica e Eólica',
+    fig2.update_layout(
+        title={
+            'text': 'Correlação: Hidráulica, Térmica e Eólica',
+            'x': 0.0,  # Alinhando o título à esquerda
+            'xanchor': 'left',
+            'y': 0.95  # Empurrando o título um pouco para cima
+        },
         xaxis_title='Fonte de Energia',
         yaxis_title='Fonte de Energia',
-        title_x=0.5  # Centralizando o título
+        annotations=[dict(font=dict(size=16))],  # Aumentando o tamanho do texto
+        margin=dict(t=100),  # Criando espaço no topo
     )
 
-    # Exibindo o gráfico interativo no Streamlit
-    st.plotly_chart(fig)
+    st.header("Correlação:")
+    st.write("O gráfico temporal apresenta a geração média de cada fonte renovável ao longo do tempo em MWmed, considerando todas as regiões do Brasil. Ele permite visualizar as variações na produção de energia e possíveis padrões sazonais.")    
+    # Grafico Temporal
+    st.plotly_chart(fig1)
+    st.write("""
+        Dentre as fontes analisadas, a hidráulica segue um ciclo anual bem definido, iniciando com alta geração e diminuindo progressivamente até o final do ano. Esse comportamento influencia diretamente outras fontes, como a térmica e a eólica.
+             
+        Para explorar essas relações, foi elaborado um gráfico de correlação, que compara a variação das diferentes fontes de energia. A fonte solar não foi incluída nessa análise, pois seus valores foram frequentemente insignificantes ou nulos ao longo do período observado.
+    """)
+    # Grafico de Correlacao
+    st.plotly_chart(fig2)
+    st.write("Os cálculos do coeficiente de correlação (r) confirmam a relação inversa entre a geração hidráulica e as demais fontes: r = -0.41 entre hidráulica e eólica, e r = -0.66 entre hidráulica e térmica. Isso indica que, quando a geração hidráulica está alta, essas fontes tendem a apresentar uma redução, e vice-versa.")
 
     st.divider()
 

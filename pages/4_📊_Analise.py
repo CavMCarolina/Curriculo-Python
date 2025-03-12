@@ -46,7 +46,7 @@ if pages == "Introdução":
         """Formata apenas as colunas numéricas para 2 casas decimais, 
         troca pontos por vírgulas e adiciona separador de milhar.
         Mantém colunas 'ano' e 'semana' sem formatação."""
-        
+    
         df_formatado = df.copy()  # Copia o DataFrame original
         
         for coluna in df_formatado.select_dtypes(include=['float64', 'int64']):
@@ -70,7 +70,7 @@ if pages == "Introdução":
     df_estilizado = formatar_df(df)
 
     # Exibindo no Streamlit
-    st.dataframe(df_estilizado)
+    st.dataframe(df_estilizado, use_container_width=True)
     st.divider()
 
     # Identificação das Variáveis
@@ -337,22 +337,25 @@ elif pages == "Análise Inicial":
     st.write("O gráfico temporal apresenta a geração média de cada fonte renovável ao longo do tempo em MWmed, considerando todas as regiões do Brasil. Ele permite visualizar as variações na produção de energia e possíveis padrões sazonais.")    
     # Grafico Temporal
     st.plotly_chart(fig1)
-    st.write("""
+
+    col1, col2, col3 = st.columns([0.3, 0.1, 0.5])
+    col1.write("""
         Dentre as fontes analisadas, a hidráulica segue um ciclo anual bem definido, iniciando com alta geração e diminuindo progressivamente até o final do ano. Esse comportamento influencia diretamente outras fontes, como a térmica e a eólica.
              
         Para explorar essas relações, foi elaborado um gráfico de correlação, que compara a variação das diferentes fontes de energia. A fonte solar não foi incluída nessa análise, pois seus valores foram frequentemente insignificantes ou nulos ao longo do período observado.
     """)
     # Grafico de Correlacao
-    st.plotly_chart(fig2)
+    col3.plotly_chart(fig2)
     st.write("Os cálculos do coeficiente de correlação (r) confirmam a relação inversa entre a geração hidráulica e as demais fontes: r = -0.41 entre hidráulica e eólica, e r = -0.66 entre hidráulica e térmica. Isso indica que, quando a geração hidráulica está alta, essas fontes tendem a apresentar uma redução, e vice-versa.")
 
     st.divider()
 
+    # Conclusao
     st.header("Conclusão da Análise Inicial:")
     st.markdown(f"""
         <div class="flex">
             <p class="negrito">Hidráulica </p>
-            <p>= É a mais estável e amplamente utilizada, sem grandes variações.</p>
+            <p>= É a mais estável e amplamente utilizada, sem grandes variações. Possui ciclos anuais e correlação inversa com a Térmica e a Eólica</p>
         </div>
         <div class="flex">
             <p class="negrito">Térmica </p>
@@ -385,8 +388,7 @@ elif pages == "Distribuições":
     "Hidráulica": "hidraulica",
     "Térmica": "termica",
     "Eólica": "eolica",
-    "Solar": "solar",
-    "Total": "total"
+    "Solar": "solar"
     }
 
     # Criando selectbox com as keys 
@@ -486,8 +488,6 @@ elif pages == "Planilha dos Dados":
 
     # Criar lista de opções do selectbox com os nomes formatados
     fontes = ["Todas"] + [mapeamento_nomes.get(col, col.capitalize()) for col in df_agrupado.columns if col not in ["ano", "total", "semana", "regiao"]]
-
-
     df_long = df_agrupado.melt(id_vars=["ano"], var_name="Fonte Renovável", value_name="Geração (MWmed)")
 
     # Criar o selectbox
@@ -508,7 +508,10 @@ elif pages == "Planilha dos Dados":
     # Deixar bonito no front
     df_filtered = df_filtered.rename(columns={"ano": "Ano"})
 
-    # Exibir a tabela
+    # Formatar a coluna 'Ano' para garantir que não tenha separador de milhar
+    df_filtered['Ano'] = df_filtered['Ano'].apply(lambda x: str(int(x)))  # Convertendo para string sem ponto de milhar
+
+    # Exibir a tabela com barras de progresso
     st.dataframe(
         df_filtered,
         column_config={
@@ -519,7 +522,8 @@ elif pages == "Planilha dos Dados":
                 max_value=int(df_filtered["Geração (MWmed)"].max()),  
                 width="medium"  # Ajusta a largura da barra
             )
-        }
+        },
+        use_container_width=True  # Largura total da tela
     )
 
     st.header("Conclusão:")

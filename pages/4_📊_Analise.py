@@ -417,6 +417,18 @@ elif pages == "Distribuições":
         dist = st.selectbox("Escolha a distribuição para análise:", ["Poisson", "Normal"])
 
         if dist == "Poisson":
+            # Explicação da Distribuição
+            st.header("Distribução de Poisson:")
+            st.write("""A distribuição de Poisson é utilizada para modelar o número de ocorrências de um evento em um intervalo de tempo ou espaço fixo, onde os eventos são independentes entre si e ocorrem a uma taxa constante. É uma boa ferramenta para entender a variabilidade e as probabilidades de ocorrência desses eventos. Ao usar essa distribuição, você pode obter insights sobre o comportamento de sistemas e processos em que os eventos não seguem um padrão previsível, mas têm uma taxa constante de ocorrência. Ela é caracterizada por um único parâmetro:""")
+            st.markdown("""
+                <ul>
+                    <li>λ (taxa média de ocorrência): Representa a média de eventos que ocorrem em um intervalo de tempo ou espaço.</li>
+                </ul>
+                <h4>Sugestões de Input:</h4>
+                <p>Número Mínimo e Máximo de Eventos: Esses parâmetros controlam o intervalo de valores possíveis para os eventos a serem analisados. O número mínimo pode ser 0, pois é improvável que ocorra um valor negativo, mas, se a taxa média for muito grande (como é o caso), pode ser mais próximo. O número máximo pode ser determinado com base na taxa média de ocorrência (λ) ou ser ajustado dinamicamente para observar diferentes intervalos.</p>
+                <hr>
+            """, unsafe_allow_html=True)
+
             col1, col2, col3 = st.columns([0.3, 0.2, 0.5])
             
             lambda_est = df[coluna_escolhida].mean()
@@ -445,21 +457,25 @@ elif pages == "Distribuições":
                 y_selec = y
                 plot_distribution(x, y_selec, "Distribuição de Poisson", "Número de eventos", "Probabilidade")
                             
-
-
-                            
         elif dist == "Normal": 
+            # Explicação da Distribuição
+            st.header("Distribução Normal:")
+            st.write("""A distribuição normal é caracterizada pela forma de "sino", onde a maioria dos dados se agrupa em torno da média, e a probabilidade diminui à medida que nos afastamos dessa média, ela é muito útil para prever ou entender o comportamento de um conjunto de dados. A distribuição normal é definida por dois parâmetros principais:""")
+            st.markdown("""
+                <ul>
+                    <li>μ (média): A posição do centro da distribuição.</li>
+                    <li>σ (desvio padrão): A medida de dispersão ou variabilidade dos dados em torno da média.</li>
+                </ul>
+                <h4>Sugestões de Input:</h4>
+                <p>A largura de classe é a espessura de cada "barra" no histograma. Você pode ajustar a granularidade da visualização. Uma largura de classe muito pequena pode resultar em muito "ruído" (ou variação aleatória), enquanto uma largura muito grande pode esconder detalhes importantes da distribuição.</p>
+                <p>Sugiro definir a largura de classe perto da média, a distribuição do histograma pode refletir de forma mais fiel a densidade dos dados ao redor da média, sem exagerar na dispersão. Outra opção seria colocar um valor que é um pequeno múltiplo da média ou do desvio padrão. Por exemplo, um valor como 1x, 2x ou 3x da média ou do desvio padrão</p>
+                <hr>
+            """, unsafe_allow_html=True)
+
             n = df[coluna_escolhida].count()
             mu_est = df[coluna_escolhida].mean()
             sigma_est = df[coluna_escolhida].std()
             st.subheader(f"Estimativa de μ: {mu_est:.2f}, σ: {sigma_est:.2f}")
-
-
-            # Create distplot with custom bin_size
-            #colunas_categoricas = df.select_dtypes(include=[np.character]).#columns.tolist()
-            
-            #st.selectbox("Escolha uma variável qualitativa",colunas_categoricas)
-
 
             hist_data = [df[coluna_escolhida].dropna().tolist()]
             group_labels=['distplot']
@@ -481,6 +497,7 @@ elif pages == "Distribuições":
             st.plotly_chart(fig)
 
             p = ggplot(df, aes(sample=coluna_escolhida)) + geom_qq(size=3,colour='red',alpha=0.7) + geom_qq_line()+theme_bw()+labs(x="Quantis Teóricos",y = "Quantis Amostrais", title="Gráfico QQPlot")
+            st.header("Verificar se os dados seguem a Distribuição Normal:")
             st.pyplot(ggplot.draw(p))
 
 # Página das Planilhas
